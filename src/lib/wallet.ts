@@ -4,7 +4,7 @@ import { mainnet, sepolia } from 'wagmi/chains'
 import { QueryClient } from '@tanstack/react-query'
 
 // Get projectId from https://cloud.walletconnect.com
-const projectId = process.env.NEXT_PUBLIC_PROJECT_ID!
+const projectId = 'bac3cc89403d0f15b40de5831c41a366'
 
 const metadata = {
   name: 'Crypto Wallet App',
