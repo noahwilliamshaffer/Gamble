@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     const address = addressMatch[0]
     
     // Create or find user
-    const user = await prisma.user.upsert({
+    await prisma.user.upsert({
       where: { address },
       update: {},
       create: { address },

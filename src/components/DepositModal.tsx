@@ -30,7 +30,7 @@ export function DepositModal({ isOpen, onClose, onDeposit }: DepositModalProps) 
       await onDeposit(numAmount)
       setAmount('')
       onClose()
-    } catch (error) {
+    } catch {
       setError('Deposit failed. Please try again.')
     } finally {
       setIsLoading(false)

@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { ConnectWallet } from '@/components/ConnectWallet'
@@ -8,10 +7,8 @@ import { Wallet, Shield, Zap } from 'lucide-react'
 
 export default function Home() {
   const router = useRouter()
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
-  const handleAuthenticated = (address: string) => {
-    setIsAuthenticated(true)
+  const handleAuthenticated = () => {
     router.push('/dashboard')
   }
 

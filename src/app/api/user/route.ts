@@ -26,7 +26,7 @@ export async function GET() {
     
     return NextResponse.json({
       address: user.address,
-      deposits: user.deposits.map((deposit: any) => ({
+      deposits: user.deposits.map((deposit) => ({
         id: deposit.id,
         amount: deposit.amount,
         timestamp: deposit.timestamp,
