@@ -5,6 +5,7 @@ import { useAccount, useBalance } from 'wagmi'
 import { motion } from 'framer-motion'
 import { Wallet, Plus, History } from 'lucide-react'
 import { DepositModal } from './DepositModal'
+import { Toast, useToast } from './Toast'
 
 interface Deposit {
   id: string
@@ -18,6 +19,7 @@ export function Dashboard() {
   const [deposits, setDeposits] = useState<Deposit[]>([])
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const { toast, showToast, hideToast } = useToast()
 
   useEffect(() => {
     if (address) {
@@ -40,20 +42,26 @@ export function Dashboard() {
   }
 
   const handleDeposit = async (amount: number) => {
-    const response = await fetch('/api/deposit', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ amount }),
-    })
+    try {
+      const response = await fetch('/api/deposit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ amount }),
+      })
 
-    if (!response.ok) {
-      throw new Error('Deposit failed')
+      if (!response.ok) {
+        throw new Error('Deposit failed')
+      }
+
+      // Refresh deposits
+      await fetchUserData()
+      showToast(`Successfully deposited ${amount} ETH!`, 'success')
+    } catch (error) {
+      showToast('Deposit failed. Please try again.', 'error')
+      throw error
     }
-
-    // Refresh deposits
-    await fetchUserData()
   }
 
   const formatAddress = (addr: string) => {
@@ -175,6 +183,13 @@ export function Dashboard() {
         isOpen={isDepositModalOpen}
         onClose={() => setIsDepositModalOpen(false)}
         onDeposit={handleDeposit}
+      />
+
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
       />
     </div>
   )
