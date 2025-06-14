@@ -5,9 +5,9 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-// Database types
+// Database types (Firebase Auth ID will be used as the user ID)
 export interface User {
-  id: string
+  id: string // Firebase Auth UID
   email?: string
   phone?: string
   created_at: string

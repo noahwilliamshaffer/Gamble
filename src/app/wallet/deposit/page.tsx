@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { auth } from '@/lib/firebase'
+import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth'
 import { supabase, type User } from '@/lib/supabase'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -24,25 +26,31 @@ export default function DepositPage() {
 
   const checkUser = async () => {
     try {
-      const { data: { session } } = await supabase.auth.getSession()
-      
-      if (!session) {
-        router.push('/login')
-        return
-      }
+      onAuthStateChanged(auth, async (firebaseUser: FirebaseUser | null) => {
+        if (!firebaseUser) {
+          router.push('/login')
+          setLoading(false)
+          return
+        }
 
-      const { data: userData, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', session.user.id)
-        .single()
+        // Get user data from Supabase database using Firebase UID
+        const { data: userData, error } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', firebaseUser.uid)
+          .single()
 
-      if (error) throw error
-      setUser(userData)
+        if (error) {
+          console.error('Error fetching user:', error)
+          router.push('/login')
+        } else {
+          setUser(userData)
+        }
+        setLoading(false)
+      })
     } catch (error) {
       console.error('Error:', error)
       router.push('/login')
-    } finally {
       setLoading(false)
     }
   }
