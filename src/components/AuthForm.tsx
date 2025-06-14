@@ -37,7 +37,7 @@ export default function AuthForm({ onSuccess }: AuthFormProps) {
       
       toast.success('Successfully signed in with Google!');
       onSuccess();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Google sign-in error:', error);
       toast.error('Failed to sign in with Google. Please try again.');
     } finally {
@@ -69,7 +69,7 @@ export default function AuthForm({ onSuccess }: AuthFormProps) {
       setConfirmationResult(confirmation);
       setShowCodeInput(true);
       toast.success('Verification code sent to your phone!');
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Phone sign-in error:', error);
       toast.error('Failed to send verification code. Please check your phone number.');
     } finally {
@@ -96,7 +96,7 @@ export default function AuthForm({ onSuccess }: AuthFormProps) {
       
       toast.success('Successfully signed in with phone number!');
       onSuccess();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Code verification error:', error);
       toast.error('Invalid verification code. Please try again.');
     } finally {

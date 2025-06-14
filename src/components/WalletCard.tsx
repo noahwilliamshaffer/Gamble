@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
-import { Copy, Check, Bitcoin, Zap } from 'lucide-react';
+import { Copy, Check, Zap } from 'lucide-react';
 
 interface WalletCardProps {
   bitcoinAddress: string;
@@ -23,15 +23,12 @@ export default function WalletCard({ bitcoinAddress, ethereumAddress }: WalletCa
       
       // Reset copy state after 3 seconds
       setTimeout(() => setCopiedAddress(null), 3000);
-    } catch (error) {
+    } catch {
       toast.error('Failed to copy address');
     }
   };
 
-  const truncateAddress = (address: string) => {
-    if (address.length <= 20) return address;
-    return `${address.slice(0, 8)}...${address.slice(-8)}`;
-  };
+
 
   return (
     <motion.div

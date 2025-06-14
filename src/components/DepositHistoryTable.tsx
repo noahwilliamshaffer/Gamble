@@ -23,7 +23,7 @@ export default function DepositHistoryTable({ deposits }: DepositHistoryTablePro
 
   const sortedDeposits = useMemo(() => {
     return [...deposits].sort((a, b) => {
-      let aValue: any, bValue: any;
+      let aValue: string | number, bValue: string | number;
 
       switch (sortField) {
         case 'timestamp':
@@ -67,7 +67,7 @@ export default function DepositHistoryTable({ deposits }: DepositHistoryTablePro
       setCopiedTxHash(txHash);
       toast.success('Transaction hash copied to clipboard!');
       setTimeout(() => setCopiedTxHash(null), 3000);
-    } catch (error) {
+    } catch {
       toast.error('Failed to copy transaction hash');
     }
   };
@@ -98,7 +98,7 @@ export default function DepositHistoryTable({ deposits }: DepositHistoryTablePro
     }
   };
 
-  const formatDate = (timestamp: any) => {
+  const formatDate = (timestamp: { toDate: () => Date }) => {
     const date = timestamp.toDate();
     return date.toLocaleDateString('en-US', {
       year: 'numeric',
