@@ -4,29 +4,28 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
-import DashboardLayout from '@/components/DashboardLayout';
+import AuthForm from '@/components/AuthForm';
 
-export default function DashboardPage() {
-  const [user, setUser] = useState<User | null>(null);
+export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser: User | null) => {
-      if (currentUser) {
-        setUser(currentUser);
+    const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
+      if (user) {
+        // User is signed in, redirect to dashboard
+        router.push('/dashboard');
       } else {
-        // User is not signed in, redirect to login
-        router.push('/login');
+        // User is signed out
+        setIsLoading(false);
       }
-      setIsLoading(false);
     });
 
     return () => unsubscribe();
   }, [router]);
 
-  const handleLogout = () => {
-    router.push('/login');
+  const handleAuthSuccess = () => {
+    router.push('/dashboard');
   };
 
   if (isLoading) {
@@ -34,15 +33,11 @@ export default function DashboardPage() {
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white text-xl">Loading dashboard...</p>
+          <p className="text-white text-xl">Checking authentication...</p>
         </div>
       </div>
     );
   }
 
-  if (!user) {
-    return null; // This shouldn't show as we redirect to login
-  }
-
-  return <DashboardLayout firebaseUser={user} onLogout={handleLogout} />;
+  return <AuthForm onSuccess={handleAuthSuccess} />;
 } 

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from '@/components/Providers'
+import { Toaster } from '@/components/ui/sonner';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,8 +15,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Crypto Wallet App",
-  description: "A simple crypto wallet login and deposit app",
+  title: "Crypto Casino - Premium Gaming Experience",
+  description: "The most advanced cryptocurrency casino platform with Bitcoin and Ethereum support",
+  keywords: "crypto, casino, bitcoin, ethereum, gambling, blockchain",
+  authors: [{ name: "Crypto Casino Team" }],
+  viewport: "width=device-width, initial-scale=1",
 };
 
 export default function RootLayout({
@@ -30,6 +34,12 @@ export default function RootLayout({
       >
         <Providers>
           {children}
+          <Toaster 
+            position="top-right" 
+            richColors 
+            closeButton
+            theme="dark"
+          />
         </Providers>
       </body>
     </html>
